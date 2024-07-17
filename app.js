@@ -52,6 +52,7 @@ const username = prompt('Welcome to the CRM, what is your name? ');
 const createCustomer = async () => {
 
     console.log('You have selected 1, create a customer profile.')
+    console.log('')
     const Name = prompt("What is the customer's name? ")
     const Age = parseInt(prompt("What is the customer's age? "))
     
@@ -68,7 +69,7 @@ const createCustomer = async () => {
 
     // message the result
     console.log('A new customer profile has been created.')
-    console.log("New customer: ", customer);
+    console.log(`id: ${customer._id} -- Name: ${customer.name} | Age: ${customer.age}`);
 };
 
 // READ customer index
@@ -76,13 +77,18 @@ const getAllCustomers = async () => {
     
     // call a const that looks up the customers
     const customers = await Customer.find();
+    
+    // message the choice
+    console.log('')
+    console.log('You have selected 2, view all customers.');
+    console.log('')
 
-    // HOW DO YOU WANT IT TO LOOK?
-    // I want a forEach that console logs each customers id, name, and age
-    // that looks similar to the Sample Exchange
-
-    // message the result
-    console.log('Below is a list of our customers:', customers);
+    // list the objects by id
+    console.log('Below is a list of our customers:');
+    console.log('')
+    customers.forEach(person => {
+        console.log(`id: ${person._id} -- Name: ${person.name} | Age: ${person.age}`)
+    });
 };
 
 // UPDATE customer profile
@@ -90,28 +96,67 @@ const updateCustomer = async () => {
 
     // call a const that looks up the customers
     const customers = await Customer.find();
-
-    // HOW DO YOU WANT IT TO LOOK?
-    // I want it to be an exact replica of READ format
-    // with additional prompts for a new name and new age
-    // I would like an if() condition that if the response is ''
-    // the original data is not changed
+    
+    // message the choice
+    console.log('')
+    console.log('You have selected 3, update a customer profile.');
+    console.log('')
 
     // list the objects by id
-    console.log('Below is a list of our customers:', customers);
+    console.log('Below is a list of our customers:');
+    
+    customers.forEach(person => {
+        console.log(`id: ${person._id} -- Name: ${person.name} | Age:${person.age}`)
+    });
+    console.log('')
+    // prompt the user to begin changes
+    const id = prompt('Copy and paste the id of the customer you would like to update here: ');
+    const customer = await Customer.findById(id);
+    let temp = customer
+    customer.name = prompt(`What is ${temp.name}'s new name? `)
+    customer.age = prompt(`${temp.name}'s age is currently ${temp.age}. What is ${temp.name}'s new age? `)
+
+    // invoke a save to update the database
+    await customer.save();
 };
 
 // DELETE customer profile
 const deleteCustomer = async () => {
     
-    // HOW DO YOU WANT IT TO LOOK?
-    // I want it to be an exact replica of the READ format
-    // prompt the use to provide the id of the profile being deleted
-    // create a temp var that holds that value
-    // console.log(`The customer id: ${id} -- Name: ${name}, Age: ${age} has been removed.`)
+    // call a const that looks up the customers
+    const customers = await Customer.find();
+    
+    // message the choice
+    console.log('')
+    console.log('You have selected 2, view all customers.');
+    console.log('')
 
-}
+    // list the objects by id
+    console.log('Below is a list of our customers:');
+    console.log('')
+    customers.forEach(person => {
+        console.log(`id: ${person._id} -- Name: ${person.name} | Age: ${person.age}`)
+    });
+    console.log('')
 
+    // begin delete process
+    const id = prompt('Copy and paste the id of the customer you would like to delete here: ');
+    const customer = await Customer.findById(id);
+    
+    // create temp var to use for messaging
+    let temp = customer
+    const confirmDelete = async () => {
+        if (prompt(`Are you sure you want to delete ${customer.name}'s profile? (Y/N) `) == 'Y') {
+            await customer.deleteOne();
+        } else {
+            console.log(`id: ${temp._id} -- Name: ${temp.name} | Age: ${temp.age} has been kept.`)
+        }
+    };
+    confirmDelete();
+    console.log('')
+    console.log(`id: ${temp._id} -- Name: ${temp.name} | Age: ${temp.age} has been removed.`)
+    console.log('Please wait for deletions to be reflected in the system.')
+};
 
 const queries = async () => {
     
@@ -164,6 +209,7 @@ const queries = async () => {
         } else if (choice === '5') {
             
             // messag exit
+            console.log('')
             console.log('Exiting...')
             
             // exit 
@@ -171,6 +217,7 @@ const queries = async () => {
         } else {
             
             // message invalid response
+            console.log('')
             console.log(`Invalid response. Please try again by selecting a number from 1-5.`)
         };
     };
