@@ -146,16 +146,16 @@ const deleteCustomer = async () => {
     // create temp var to use for messaging
     let temp = customer
     const confirmDelete = async () => {
-        if (prompt(`Are you sure you want to delete ${customer.name}'s profile? (Y/N) `) == 'Y') {
+        if (prompt(`Are you sure you want to delete ${customer.name}'s profile? (y/n) `) == 'y' || 'Y') {
             await customer.deleteOne();
+            console.log('')
+            console.log(`id: ${temp._id} -- Name: ${temp.name} | Age: ${temp.age} has been removed.`)
+            console.log('Please wait for deletions to be reflected in the system.')
         } else {
             console.log(`id: ${temp._id} -- Name: ${temp.name} | Age: ${temp.age} has been kept.`)
         }
     };
     confirmDelete();
-    console.log('')
-    console.log(`id: ${temp._id} -- Name: ${temp.name} | Age: ${temp.age} has been removed.`)
-    console.log('Please wait for deletions to be reflected in the system.')
 };
 
 const queries = async () => {
