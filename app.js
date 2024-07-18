@@ -128,7 +128,7 @@ const deleteCustomer = async () => {
     
     // message the choice
     console.log('')
-    console.log('You have selected 2, view all customers.');
+    console.log('You have selected 4, delete a customer profile.');
     console.log('')
 
     // list the objects by id
